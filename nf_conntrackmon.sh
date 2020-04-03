@@ -16,7 +16,9 @@ if [ $nf_conntrack_pct -gt $threshhold_pct ]; then
         echo "" >> /etc/nf_conntrackmon/msgfinal.txt
         uptime >> /etc/nf_conntrackmon/msgfinal.txt
         echo "" >> /etc/nf_conntrackmon/msgfinal.txt
+	echo "Top 5 Users have highest established connection:" >> /etc/nf_conntrackmon/msgfinal.txt
+        echo "NUMBER OF CONNECTIONS - IP ADDRESS" >> /etc/nf_conntrackmon/msgfinal.txt
+        cat /proc/net/nf_conntrack | grep ESTABLISHED | awk '{print $7}' | cut -d= -f2 | sort | uniq -c | sort -nr | head -5 >> /etc/nf_conntrackmon/msgfinal.txt
 
         ssmtp email@example.com < /etc/nf_conntrackmon/msgfinal.txt
-
 fi
